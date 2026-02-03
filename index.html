@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevSource | Enterprise Assets</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary: #8b5cf6;
+            --bg: #030712;
+            --surface: #111827;
+            --surface-hover: #1f2937;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(17, 24, 39, 0.85);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+        }
+
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.08);
+            --glass: rgba(255, 255, 255, 0.9);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* --- Top Header Bar --- */
+        .top-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 8px 5%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* --- Main Navbar --- */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 5%;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #theme-btn {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        /* --- Layout Container --- */
+        .main-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 5%;
+            gap: 40px;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 90px;
+        }
+
+        .sidebar h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-list li {
+            list-style: none;
+            margin-bottom: 10px;
+        }
+
+        /* Updated Sidebar Buttons */
+        .category-btn {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 14px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--surface-hover);
+            color: var(--primary);
+            transform: translateX(5px);
+            font-weight: 700;
+        }
+
+        /* --- Content Area --- */
+        .content-area {
+            flex-grow: 1;
+        }
+
+        /* --- Hero --- */
+        .hero {
+            text-align: center;
+            padding: 40px 0 60px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.2s;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(90deg, var(--primary), #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientFlow 3s ease infinite;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.4s;
+        }
+
+        /* --- Grid --- */
+        .grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .niche-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        /* Animation for filtering */
+        .card.hide {
+            display: none;
+        }
+
+        .card.show {
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .card-img {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 4px 10px;
+            font-size: 10px;
+            border-radius: 4px;
+            backdrop-filter: blur(4px);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-body h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .card-body p {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--surface-hover);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .card:hover .download-btn {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 60px 5% 30px;
+            margin-top: 60px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 40px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-col h5 {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        .footer-col p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .footer-links li {
+            list-style: none;
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .newsletter input {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* --- Overlay --- */
+        #overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader-bar {
+            width: 250px;
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        #progress {
+            width: 0%;
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.1s;
+        }
+
+        #download-guide {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1.9s ease, transform 1.9s ease;
+        }
+
+        #download-guide.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+
+
+        /* --- Responsive --- */
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body id="main-body">
+
+    <div id="overlay">
+        <h3 style="color: var(--text-main);">INITIALIZING SECURE LINK</h3>
+        <div class="loader-bar">
+            <div id="progress"></div>
+        </div>
+        <p id="percent" style="margin-top: 10px; color: var(--text-muted); font-size: 12px;">0%</p>
+    </div>
+
+    <div class="top-bar">
+        <div class="top-info">
+            <span><i class="fas fa-shield-alt"></i> Verified Enterprise License</span>
+        </div>
+        <div class="top-social">
+            <span>Follow us: &nbsp; <i class="fab fa-twitter"></i> &nbsp; <i class="fab fa-github"></i></span>
+        </div>
+    </div>
+
+    <nav>
+        <a href="#" class="logo"><i class="fas fa-cube"></i> DEVSOURCE</a>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="javascript:void(0)" id="downloadGuideBtn">Download Guide</a>
+        </div>
+        <div class="nav-actions">
+            <button id="theme-btn" onclick="toggleMode()"><i class="fas fa-moon"></i></button>
+            <a href="#" class="cta-btn" onclick="startDL('Bundle')">Get Bundle</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3><i class="fas fa-filter" style="color: var(--primary);"></i> Categories</h3>
+                <ul class="category-list">
+                    <li><button class="category-btn active" onclick="filterSelection('all')">All Templates</button></li>
+                    <li><button class="category-btn" onclick="filterSelection('ecommerce')">E-Commerce</button></li>
+                    <li><button class="category-btn" onclick="filterSelection('portfolio')">Portfolios</button></li>
+                    <li><button class="category-btn" onclick="filterSelection('crypto')">Crypto / Web3</button></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content-area">
+
+            <section class="hero">
+                <div
+                    style="display: inline-block; background: rgba(99,102,241,0.1); color: var(--primary); border: 1px solid var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 20px;">
+                    NEW 2026 UPDATE
+                </div>
+                <h1>Premium <span>Assets</span> for<br>Modern Developers</h1>
+                <p>Download production-ready source code verified for speed, SEO, and conversion.</p>
+            </section>
+
+
+
+            <div class="grid-header">
+                <h3>Latest Files</h3>
+                <span style="font-size: 13px; color: var(--primary); cursor: pointer;"
+                    onclick="filterSelection('all')">Show All</span>
+            </div>
+
+            <section id="download-guide" style="margin-bottom:60px;">
+                <div class="card" style="max-width:900px;margin:auto;">
+                    <div class="card-body">
+                        <h2 style="font-size:28px;margin-bottom:10px;">
+                            <i class="fas fa-book" style="color:var(--primary);"></i>
+                            Download Guide
+                        </h2>
+
+                        <p style="color:var(--text-muted);margin-bottom:25px;">
+                            Follow these simple steps to safely download and use our premium assets.
+                        </p>
+
+                        <ol style="line-height:1.9;font-size:15px;color:var(--text-main);padding-left:20px;">
+                            <li>Select your desired template from the list.</li>
+                            <li>Click on <b>Download Source</b> button.</li>
+                            <li>Complete quick verification (anti-bot security).</li>
+                            <li>Download link will be unlocked automatically.</li>
+                            <li>Extract files and start using instantly.</li>
+                        </ol>
+
+                        <div style="margin-top:25px;display:flex;gap:15px;flex-wrap:wrap;">
+                            <button class="cta-btn" onclick="startDL('Guide')">
+                                <i class="fas fa-download"></i> Test Download
+                            </button>
+                            <span style="font-size:13px;color:var(--text-muted);align-self:center;">
+                                ✔ 100% Safe • ✔ No Malware • ✔ Verified Files
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="niche-grid" id="grid-container">
+
+                <div class="card filterDiv ecommerce">
+                    <div class="card-img"
+                        style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600');">
+                        <span class="badge">PRO</span>
+                    </div>
+                    <div class="card-body">
+                        <h4>E-Commerce Elite</h4>
+                        <p>High-conversion shopify style template.</p>
+                        <button class="download-btn" onclick="startDL('E-Com')"><i class="fas fa-download"></i> Download
+                            Source</button>
+                    </div>
+                </div>
+
+                <div class="card filterDiv ecommerce">
+                    <div class="card-img"
+                        style="background-image: url('https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=600');">
+                        <span class="badge">STORE</span>
+                    </div>
+                    <div class="card-body">
+                        <h4>Fashion Store</h4>
+                        <p>Modern clothing brand layout.</p>
+                        <button class="download-btn" onclick="startDL('Fashion')"><i class="fas fa-download"></i>
+                            Download Source</button>
+                    </div>
+                </div>
+
+                <div class="card filterDiv portfolio">
+                    <div class="card-img"
+                        style="background-image: url('https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600');">
+                        <span class="badge">NEW</span>
+                    </div>
+                    <div class="card-body">
+                        <h4>Portfolio Dark</h4>
+                        <p>Minimalist designer portfolio.</p>
+                        <button class="download-btn" onclick="startDL('Portfolio')"><i class="fas fa-download"></i>
+                            Download Source</button>
+                    </div>
+                </div>
+
+                <div class="card filterDiv crypto">
+                    <div class="card-img"
+                        style="background-image: url('https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600');">
+                        <span class="badge">WEB3</span>
+                    </div>
+                    <div class="card-body">
+                        <h4>Crypto Landing</h4>
+                        <p>Modern Web3 & NFT marketplace UI.</p>
+                        <button class="download-btn" onclick="startDL('Crypto')"><i class="fas fa-download"></i>
+                            Download Source</button>
+                    </div>
+                </div>
+
+                <div class="card filterDiv crypto">
+                    <div class="card-img"
+                        style="background-image: url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600');">
+                        <span class="badge">DEFI</span>
+                    </div>
+                    <div class="card-body">
+                        <h4>DeFi Exchange</h4>
+                        <p>Decentralized finance dashboard.</p>
+                        <button class="download-btn" onclick="startDL('DeFi')"><i class="fas fa-download"></i> Download
+                            Source</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="#" class="logo" style="margin-bottom: 15px; display: inline-block;">DEVSOURCE</a>
+                <p>The #1 marketplace for premium, hand-coded templates trusted by 45,000+ USA developers. Secure &
+                    Verified.</p>
+                <div style="display: flex; gap: 10px;">
+                    <i class="fab fa-cc-visa fa-lg" style="color: var(--text-muted);"></i>
+                    <i class="fab fa-cc-mastercard fa-lg" style="color: var(--text-muted);"></i>
+                    <i class="fab fa-cc-paypal fa-lg" style="color: var(--text-muted);"></i>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h5>Product</h5>
+                <ul class="footer-links">
+                    <li><a href="#">All Templates</a></li>
+                    <li><a href="#">UI Kits</a></li>
+                    <li><a href="#">Icons</a></li>
+                    <li><a href="#">Freebies</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h5>Company</h5>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">License Info</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Contact Support</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h5>Stay Updated</h5>
+                <p>Join 10,000+ developers getting free assets.</p>
+                <div class="newsletter">
+                    <input type="email" placeholder="Enter your email">
+                    <button class="cta-btn" style="width: 100%;">Subscribe</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>&copy; 2026 DevSource Inc. USA. All rights reserved. <br> Designed for high-performance.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMode() {
+            const body = document.getElementById('main-body');
+            const icon = document.querySelector('#theme-btn i');
+            if (body.hasAttribute('data-theme')) {
+                body.removeAttribute('data-theme');
+                icon.className = 'fas fa-moon';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-sun';
+            }
+        }
+
+        function startDL(name) {
+            const locker = "YOUR_OGADS_LINK_HERE";
+            const overlay = document.getElementById('overlay');
+            const bar = document.getElementById('progress');
+            const percentTxt = document.getElementById('percent');
+
+            overlay.style.display = 'flex';
+            let width = 0;
+            let id = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(id);
+                    window.location.href = locker;
+                } else {
+                    width += Math.floor(Math.random() * 5) + 1;
+                    if (width > 100) width = 100;
+                    bar.style.width = width + '%';
+                    percentTxt.innerText = "AUTHENTICATING: " + width + '%';
+                }
+            }, 80);
+        }
+
+        // --- Filtering Logic ---
+
+        // Initial load
+        filterSelection("all");
+
+        function filterSelection(c) {
+            var x, i;
+            x = document.getElementsByClassName("filterDiv");
+            if (c == "all") c = "";
+
+            for (i = 0; i < x.length; i++) {
+                removeClass(x[i], "show");
+                // Add 'hide' class by default, then remove if matched
+                if (x[i].className.indexOf(c) > -1) {
+                    x[i].style.display = "block";
+                    setTimeout(function (el) { el.classList.add("show"); }, 10, x[i]);
+                } else {
+                    x[i].style.display = "none";
+                }
+            }
+
+            // Button Active State Code
+            var btns = document.getElementsByClassName("category-btn");
+            for (var j = 0; j < btns.length; j++) {
+                btns[j].classList.remove("active");
+                if (btns[j].getAttribute("onclick").includes(c || 'all')) {
+                    btns[j].classList.add("active");
+                }
+            }
+        }
+
+        function removeClass(element, name) {
+            var arr1, arr2;
+            arr1 = element.className.split(" ");
+            arr2 = name.split(" ");
+            for (var i = 0; i < arr2.length; i++) {
+                while (arr1.indexOf(arr2[i]) > -1) {
+                    arr1.splice(arr1.indexOf(arr2[i]), 1);
+                }
+            }
+            element.className = arr1.join(" ");
+        }
+
+        document.getElementById("downloadGuideBtn").addEventListener("click", function () {
+            const guide = document.getElementById("download-guide");
+
+            if (guide.classList.contains("show")) {
+                // FADE OUT
+                guide.classList.remove("show");
+
+                setTimeout(() => {
+                    guide.style.display = "none";
+                }, 1900);
+
+            } else {
+                // FADE IN
+                guide.style.display = "block";
+
+                setTimeout(() => {
+                    guide.classList.add("show");
+                    guide.scrollIntoView({ behavior: "smooth" });
+                }, 10);
+            }
+        });
+
+
+    </script>
+
+</body>
+
+</html>
