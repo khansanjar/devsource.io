@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
-        <meta name="p:domain_verify" content="2f326a3878d69c1630299d0c7a7177f7"/>
+    <meta name="p:domain_verify" content="2f326a3878d69c1630299d0c7a7177f7" />
     <style>
         :root {
             --primary: #6366f1;
@@ -584,8 +584,9 @@
                     <div class="card-body">
                         <h4>E-Commerce Elite</h4>
                         <p>High-conversion shopify style template.</p>
-                        <button class="download-btn" onclick="startDL('E-Com')"><i class="fas fa-download"></i> Download
-                            Source</button>
+                        <button class="download-btn" onclick="startDL('https://getafilenow.com/1873650')">
+                            <i class="fas fa-download"></i> Download Source
+                        </button>
                     </div>
                 </div>
 
@@ -707,8 +708,7 @@
             }
         }
 
-        function startDL(name) {
-            const locker = "YOUR_OGADS_LINK_HERE";
+        function startDL(targetLink) {
             const overlay = document.getElementById('overlay');
             const bar = document.getElementById('progress');
             const percentTxt = document.getElementById('percent');
@@ -718,7 +718,8 @@
             let id = setInterval(() => {
                 if (width >= 100) {
                     clearInterval(id);
-                    window.location.href = locker;
+                    // Ab ye us link par jayega jo hum button me likhenge
+                    window.location.href = targetLink;
                 } else {
                     width += Math.floor(Math.random() * 5) + 1;
                     if (width > 100) width = 100;
@@ -727,6 +728,7 @@
                 }
             }, 80);
         }
+
 
         // --- Filtering Logic ---
 
